@@ -1,9 +1,0 @@
-C:\Users\Brandon\source\repos\ElectionGuard-Verifier-C#\Core\bin\Debug\netstandard2.1\Core.deps.json
-C:\Users\Brandon\source\repos\ElectionGuard-Verifier-C#\Core\bin\Debug\netstandard2.1\Core.dll
-C:\Users\Brandon\source\repos\ElectionGuard-Verifier-C#\Core\bin\Debug\netstandard2.1\Core.pdb
-C:\Users\Brandon\source\repos\ElectionGuard-Verifier-C#\Core\obj\Debug\netstandard2.1\Core.csprojAssemblyReference.cache
-C:\Users\Brandon\source\repos\ElectionGuard-Verifier-C#\Core\obj\Debug\netstandard2.1\Core.AssemblyInfoInputs.cache
-C:\Users\Brandon\source\repos\ElectionGuard-Verifier-C#\Core\obj\Debug\netstandard2.1\Core.AssemblyInfo.cs
-C:\Users\Brandon\source\repos\ElectionGuard-Verifier-C#\Core\obj\Debug\netstandard2.1\Core.csproj.CoreCompileInputs.cache
-C:\Users\Brandon\source\repos\ElectionGuard-Verifier-C#\Core\obj\Debug\netstandard2.1\Core.dll
-C:\Users\Brandon\source\repos\ElectionGuard-Verifier-C#\Core\obj\Debug\netstandard2.1\Core.pdb
