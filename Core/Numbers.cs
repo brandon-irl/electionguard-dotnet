@@ -117,20 +117,24 @@ namespace ElectionGuard.Verifier.Core
                         var ele = elements[i];
                         var hashMe = ele == null
                             ? "null"
-                            : ele is string
+                            : ele is string // Needs to be here because a string is an IEnumerable
                                 ? ele.ToString()
                                 : ele is IEnumerable
                                     ? HashSha256(ele).ToString()
                                     : ele.ToString();
 
                         var arr = Encoding.UTF8.GetBytes(hashMe + "|");
+                        sha.TransformBlock(arr, 0, arr.Length, null, 0);
+
                         if (i == elements.Length - 1)
                             sha.TransformFinalBlock(arr, 0, 0);
-                        else
-                            sha.TransformBlock(arr, 0, arr.Length, null, 0);
                     }
-                    // TODO: BigInteger cotr expects input to be little endian. Not sure of SHA256 digest 
-                    return new BigInteger(sha.Hash) % BigInteger.Add(SmallPrime, BigInteger.MinusOne);
+                    
+                    var bytes = sha.Hash.Reverse()   // BigInteger cotr expects input to be little endian, so we must reverse it
+                        .Concat(new byte[] { 0 })    // Must apppend 00 byte to end of array to signal unsigned
+                        .ToArray();
+
+                    return new BigInteger(bytes) % BigInteger.Add(SmallPrime, BigInteger.MinusOne);
                 }
             });
         }
