@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 
 namespace ElectionGuard.Verifier.Core
@@ -108,6 +109,186 @@ namespace ElectionGuard.Verifier.Core
                 public BigInteger response { get; set; }
                 public string usage { get; set; }
             }
+        }
+    }
+
+    public class Description
+    {
+        public BallotStyle[] ballot_styles { get; set; }
+        public Candidate[] candidates { get; set; }
+        public ContactInformation contact_information { get; set; }
+        public Contest[] contests { get; set; }
+        public string election_scope_id { get; set; }
+        public DateTime end_date { get; set; }
+        public GeopoliticalUnit[] geopolitical_units { get; set; }
+        public Name name { get; set; }
+        public Party[] parties { get; set; }
+        public DateTime start_date { get; set; }
+        public string type { get; set; }
+
+        public class BallotStyle
+        {
+            public string[] geopolitical_unit_ids { get; set; }
+            public string object_id { get; set; }
+        }
+
+        public class Text
+        {
+            public string language { get; set; }
+            public string value { get; set; }
+        }
+
+        public class BallotName
+        {
+            public Text[] text { get; set; }
+        }
+
+        public class Candidate
+        {
+            public BallotName ballot_name { get; set; }
+            public string object_id { get; set; }
+            public string party_id { get; set; }
+        }
+
+        public class Email
+        {
+            public string annotation { get; set; }
+            public string value { get; set; }
+        }
+
+        public class Phone
+        {
+            public string annotation { get; set; }
+            public string value { get; set; }
+        }
+
+        public class ContactInformation
+        {
+            public string[] address_line { get; set; }
+            public Email[] email { get; set; }
+            public string name { get; set; }
+            public Phone[] phone { get; set; }
+        }
+
+        public class BallotSelection
+        {
+            public string candidate_id { get; set; }
+            public string object_id { get; set; }
+            public int sequence_order { get; set; }
+        }
+
+        public class Text2
+        {
+            public string language { get; set; }
+            public string value { get; set; }
+        }
+
+        public class BallotSubtitle
+        {
+            public Text2[] text { get; set; }
+        }
+
+        public class Text3
+        {
+            public string language { get; set; }
+            public string value { get; set; }
+        }
+
+        public class BallotTitle
+        {
+            public Text3[] text { get; set; }
+        }
+
+        public class Text4
+        {
+            public string value { get; set; }
+            public string language { get; set; }
+        }
+
+        public class BallotDescription
+        {
+            public Text4[] text { get; set; }
+        }
+
+        public class Contest
+        {
+            public string @Type { get; set; }
+            public BallotSelection[] ballot_selections { get; set; }
+            public BallotSubtitle ballot_subtitle { get; set; }
+            public BallotTitle ballot_title { get; set; }
+            public string electoral_district_id { get; set; }
+            public string name { get; set; }
+            public int number_elected { get; set; }
+            public string object_id { get; set; }
+            public int sequence_order { get; set; }
+            public string vote_variation { get; set; }
+            public int votes_allowed { get; set; }
+            public BallotDescription ballotDescription { get; set; }
+        }
+
+        public class Email2
+        {
+            public string annotation { get; set; }
+            public string value { get; set; }
+        }
+
+        public class Phone2
+        {
+            public string annotation { get; set; }
+            public string value { get; set; }
+        }
+
+        public class ContactInformation2
+        {
+            public string[] address_line { get; set; }
+            public Email2[] email { get; set; }
+            public string name { get; set; }
+            public Phone2[] phone { get; set; }
+        }
+
+        public class GeopoliticalUnit
+        {
+            public ContactInformation2 contact_information { get; set; }
+            public string name { get; set; }
+            public string object_id { get; set; }
+            public string type { get; set; }
+        }
+
+        public class Text5
+        {
+            public string language { get; set; }
+            public string value { get; set; }
+        }
+
+        public class Name
+        {
+            public Text5[] text { get; set; }
+        }
+
+        public class BallotName2
+        {
+            public object[] text { get; set; }
+        }
+
+        public class Text6
+        {
+            public string value { get; set; }
+            public string language { get; set; }
+        }
+
+        public class Name2
+        {
+            public Text6[] text { get; set; }
+        }
+
+        public class Party
+        {
+            public string abbreviation { get; set; }
+            public BallotName2 ballot_name { get; set; }
+            public string color { get; set; }
+            public string logo_uri { get; set; }
+            public Name2 name { get; set; }
+            public string object_id { get; set; }
         }
     }
 }

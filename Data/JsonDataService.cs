@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Text.Json;
@@ -21,6 +22,10 @@ namespace ElectionGuard.Verifier.Data
         private readonly ILogger<JsonDataService> logger;
         private readonly JsonSerializerOptions options = new JsonSerializerOptions();
 
+        Context context;
+        Constants constants;
+        Description description;
+
         public JsonDataService(IOptions<DataOptions> dataOptions, ILogger<JsonDataService> logger, IConfiguration configuration)
         {
             this.dataOptions = dataOptions;
@@ -29,18 +34,41 @@ namespace ElectionGuard.Verifier.Data
             options.Converters.Add(new JsonConverterBigInteger());
         }
 
-        public async Task<Context> GetContext() => await GetFromFile<Context>(dataOptions.Value.ContextFileName);
-        public async Task<Constants> GetConstants() => await GetFromFile<Constants>(dataOptions.Value.ConstantsFileName);
+        public async Task<Context> GetContext()
+        {
+            if (context == null)
+                context = await GetFromFile<Context>(dataOptions.Value.ContextFileName);
+            return context;
+        }
+        public async Task<Constants> GetConstants()
+        {
+            if (constants == null)
+                constants = await GetFromFile<Constants>(dataOptions.Value.ConstantsFileName);
+            return constants;
+        }
 
+        public async Task<Description> GetDescription()
+        {
+            if (description == null)
+                description = await GetFromFile<Description>(dataOptions.Value.DescriptionFileName);
+
+            return description;
+        }
+
+        public async Task<Dictionary<string, int>> GetVoteLimits()
+        {
+            var description = await GetDescription();
+            return description.contests.ToDictionary(_ => _.object_id, _ => _.votes_allowed);
+        }
         public async IAsyncEnumerable<Guardian> GetGuardians()
         {
-            await foreach(var file in GetFromFiles<Guardian>(Path.Combine(dataOptions.Value.BaseDir, dataOptions.Value.CoefficientsFolderPath)))
+            await foreach (var file in GetFromFiles<Guardian>(Path.Combine(dataOptions.Value.BaseDir, dataOptions.Value.CoefficientsFolderPath)))
                 yield return file;
         }
 
         public async IAsyncEnumerable<EncryptedBallot> GetEncryptedBallots()
         {
-            await foreach(var file in GetFromFiles<EncryptedBallot>(Path.Combine(dataOptions.Value.BaseDir, dataOptions.Value.EncryptedBallotsFolderPath)))
+            await foreach (var file in GetFromFiles<EncryptedBallot>(Path.Combine(dataOptions.Value.BaseDir, dataOptions.Value.EncryptedBallotsFolderPath)))
                 yield return file;
         }
 

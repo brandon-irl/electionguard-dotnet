@@ -10,5 +10,6 @@ namespace ElectionGuard.Verifier.Core
 
         IAsyncEnumerable<Guardian> GetGuardians();
         IAsyncEnumerable<EncryptedBallot> GetEncryptedBallots();
+        Task<Dictionary<string, int>> GetVoteLimits();
     }
 }

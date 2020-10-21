@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ElectionGuard.Verifier.Core
 {
@@ -20,7 +21,7 @@ namespace ElectionGuard.Verifier.Core
         public static BigInteger LargePrime { get; private set; }
         public static BigInteger SmallPrime { get; private set; }
 
-        public Numbers()
+        static Numbers()
         {
             var largePrimeString = @"104438888141315250669175271071662438257996424904738378038423348328
 3953907971553643537729993126875883902173634017777416360502926082946377942955704498
@@ -103,32 +104,35 @@ namespace ElectionGuard.Verifier.Core
         public static BigInteger ModQ(BigInteger dividend) => dividend % SmallPrime;
 
         // TODO: Figure out why this is broken
-        public static BigInteger HashSha256<T>(params T[] elements)
+        public static Task<BigInteger> HashSha256<T>(params T[] elements)
         {
-            var pipeBytes = Encoding.UTF8.GetBytes("|");
-            using (var sha = SHA256.Create())
+            return Task.Run(() =>
             {
-                sha.TransformBlock(pipeBytes, 0, pipeBytes.Length, null, 0);
-                for (var i = 0; i < elements.Length; i++)
+                var pipeBytes = Encoding.UTF8.GetBytes("|");
+                using (var sha = SHA256.Create())
                 {
-                    var ele = elements[i];
-                    var hashMe = ele == null
-                        ? "null"
-                        : ele is string
-                            ? ele.ToString()
-                            : ele is IEnumerable
-                                ? HashSha256(ele).ToString()
-                                : ele.ToString();
+                    sha.TransformBlock(pipeBytes, 0, pipeBytes.Length, null, 0);
+                    for (var i = 0; i < elements.Length; i++)
+                    {
+                        var ele = elements[i];
+                        var hashMe = ele == null
+                            ? "null"
+                            : ele is string
+                                ? ele.ToString()
+                                : ele is IEnumerable
+                                    ? HashSha256(ele).ToString()
+                                    : ele.ToString();
 
-                    var arr = Encoding.UTF8.GetBytes(hashMe + "|");
-                    if (i == elements.Length - 1)
-                        sha.TransformFinalBlock(arr, 0, 0);
-                    else
-                        sha.TransformBlock(arr, 0, arr.Length, null, 0);
+                        var arr = Encoding.UTF8.GetBytes(hashMe + "|");
+                        if (i == elements.Length - 1)
+                            sha.TransformFinalBlock(arr, 0, 0);
+                        else
+                            sha.TransformBlock(arr, 0, arr.Length, null, 0);
+                    }
+                    // TODO: BigInteger cotr expects input to be little endian. Not sure of SHA256 digest 
+                    return new BigInteger(sha.Hash) % BigInteger.Add(SmallPrime, BigInteger.MinusOne);
                 }
-                // TODO: BigInteger cotr expects input to be little endian. Not sure of SHA256 digest 
-                return new BigInteger(sha.Hash) % BigInteger.Add(SmallPrime, BigInteger.MinusOne);
-            }
+            });
         }
     }
 }
