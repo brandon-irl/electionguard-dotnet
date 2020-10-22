@@ -1,8 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ElectionGuard.Verifier.Core;
-using ElectionGuard.Verifier.Data;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,10 +11,10 @@ namespace ElectionGuard.Verifier.App
     {
         private readonly ILogger<VerifierService> logger;
         private readonly IHostApplicationLifetime appLifetime;
-        private readonly Verifier verifier;
+        private readonly Core.Verifier verifier;
         private int? exitCode;
 
-        public VerifierService(ILogger<VerifierService> logger, IHostApplicationLifetime appLifetime, Verifier verifier)
+        public VerifierService(ILogger<VerifierService> logger, IHostApplicationLifetime appLifetime, Core.Verifier verifier)
         {
             this.logger = logger;
             this.appLifetime = appLifetime;
@@ -40,9 +38,9 @@ namespace ElectionGuard.Verifier.App
                         var keyGen = await verifier.VerifyAllGuardians();
                         Console.WriteLine($"Key Gen Result: {(keyGen ? "success" : "failure")} ");
 
-                        Console.WriteLine("Starting [box 3, 4, 5] ballot encyption check...");
-                        var ballots = await verifier.VerifyAllBallots();
-                        Console.WriteLine($"Ballots Result: {(ballots ? "success" : "failure")} ");
+                        // Console.WriteLine("Starting [box 3, 4, 5] ballot encyption check...");
+                        // var ballots = await verifier.VerifyAllBallots();
+                        // Console.WriteLine($"Ballots Result: {(ballots ? "success" : "failure")} ");
 
                         //Console.WriteLine("Starting [box 6, 9] cast ballot check...");
                         //Console.WriteLine("Starting [box 10] spoiled ballot check...");

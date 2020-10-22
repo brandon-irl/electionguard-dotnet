@@ -18,7 +18,7 @@ namespace ElectionGuard.Verifier.App
                 .ConfigureServices((context, services) =>
                 {
                     services.AddDataServices(context);
-                    services.AddSingleton<Verifier>();
+                    services.AddSingleton<Core.Verifier>();
                     services.AddHostedService<VerifierService>();
                 });
         }

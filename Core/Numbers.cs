@@ -134,6 +134,7 @@ namespace ElectionGuard.Verifier.Core
                         .Concat(new byte[] { 0 })    // Must apppend 00 byte to end of array to signal unsigned
                         .ToArray();
 
+                    Console.WriteLine("your shit is " + BitConverter.ToString(sha.Hash).Replace("-", ""));
                     return new BigInteger(bytes) % BigInteger.Add(SmallPrime, BigInteger.MinusOne);
                 }
             });

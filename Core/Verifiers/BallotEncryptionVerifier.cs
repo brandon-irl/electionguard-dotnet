@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using ElectionGuard.Verifier.Core;
 
-namespace ElectionGuard.Verifier.App
+namespace ElectionGuard.Verifier.Core
 {
     public class BallotEncryptionVerifier
     {

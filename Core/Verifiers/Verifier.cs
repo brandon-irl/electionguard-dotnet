@@ -1,13 +1,9 @@
 using System;
-using System.Reflection;
-using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using ElectionGuard.Verifier.Core;
-using Microsoft.Extensions.Logging;
-using System.Linq;
 
-namespace ElectionGuard.Verifier.App
+namespace ElectionGuard.Verifier.Core
 {
     public class Verifier
     {
@@ -87,7 +83,7 @@ namespace ElectionGuard.Verifier.App
             foreach (var coeffProof in guardian.coefficient_proofs)
             {
                 // computes challenge (c_ij) with hash, H(cij = H(base hash, public key, commitment) % q, each guardian has quorum number of these challenges
-                var challengeComputed = await Numbers.HashSha256(context.crypto_base_hash, coeffProof.public_key, coeffProof.commitment) % constants.large_prime;
+                var challengeComputed = Numbers.ModP(await Numbers.HashSha256(context.crypto_base_hash, coeffProof.public_key, coeffProof.commitment));
                 // check if the computed challenge value matches the given
                 if (!coeffProof.challenge.Equals(challengeComputed))
                     Console.WriteLine($"guardian {guardian.owner_id}, quorum {coeffProof.name}, challenge number error.");
