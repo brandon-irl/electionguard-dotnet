@@ -97,13 +97,12 @@ namespace ElectionGuard.Verifier.Core
             IsWithinRange(num, 0, LargePrime);
 
         public static bool IsWithinSetZrp(BigInteger num) =>
-            IsWithinRange(num, 0, LargePrime) && BigInteger.Equals(1, BigInteger.ModPow(num, SmallPrime, LargePrime));
+            IsWithinRange(num, 0, LargePrime) && BigInteger.Equals(BigInteger.One, BigInteger.ModPow(num, SmallPrime, LargePrime));
 
         public static BigInteger ModP(BigInteger dividend) => dividend % LargePrime;
 
         public static BigInteger ModQ(BigInteger dividend) => dividend % SmallPrime;
 
-        // TODO: Figure out why this is broken
         public static Task<BigInteger> HashSha256<T>(params T[] elements)
         {
             return Task.Run(() =>
@@ -134,7 +133,7 @@ namespace ElectionGuard.Verifier.Core
                         .Concat(new byte[] { 0 })    // Must apppend 00 byte to end of array to signal unsigned
                         .ToArray();
 
-                    Console.WriteLine("your shit is " + BitConverter.ToString(sha.Hash).Replace("-", ""));
+                    //Console.WriteLine("Hash is " + BitConverter.ToString(sha.Hash).Replace("-", ""));
                     return new BigInteger(bytes) % BigInteger.Add(SmallPrime, BigInteger.MinusOne);
                 }
             });

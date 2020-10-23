@@ -62,10 +62,16 @@ namespace ElectionGuard.Verifier.Core
             var count = 0;
             await foreach (var guardian in dataService.GetGuardians())
             {
-                if (!await VerifyGuardian(guardian))
-                    Console.WriteLine($"guardian {guardian.owner_id} key generation verification failure.");
+                if (!await VerifyGuardian(guardian, count))
+                {
+                    Console.WriteLine($"guardian {count} key generation verification failure.");
+                    error = true;
+                }
                 count++;
             }
+
+            if (!error)
+                Console.WriteLine("All guardians' key generation verification success. ");
 
             // Verify guardian number
             if (context.number_of_guardians != count)
@@ -74,25 +80,33 @@ namespace ElectionGuard.Verifier.Core
             return !error;
         }
 
-        private async Task<bool> VerifyGuardian(Guardian guardian)
+        private async Task<bool> VerifyGuardian(Guardian guardian, int guardianId)
         {
 
             if (guardian == null)
                 throw new ArgumentNullException(nameof(Guardian));
             var error = false;
+            var i = 0;
             foreach (var coeffProof in guardian.coefficient_proofs)
             {
                 // computes challenge (c_ij) with hash, H(cij = H(base hash, public key, commitment) % q, each guardian has quorum number of these challenges
                 var challengeComputed = Numbers.ModP(await Numbers.HashSha256(context.crypto_base_hash, coeffProof.public_key, coeffProof.commitment));
                 // check if the computed challenge value matches the given
                 if (!coeffProof.challenge.Equals(challengeComputed))
-                    Console.WriteLine($"guardian {guardian.owner_id}, quorum {coeffProof.name}, challenge number error.");
+                {
+                    Console.WriteLine($"guardian {guardianId}, quorum {i}, challenge number error.");
+                    error = true;
+                }
 
                 // check the equation generator ^ response mod p = (commitment * public key ^ challenge) mod p
                 var left = BigInteger.ModPow(constants.generator, coeffProof.response, constants.large_prime);
                 var right = BigInteger.Multiply(coeffProof.commitment, BigInteger.ModPow(coeffProof.public_key, coeffProof.challenge, constants.large_prime)) % constants.large_prime;
                 if (!left.Equals(right))
+                {
                     Console.WriteLine($"guardian {guardian.owner_id}, quorum {coeffProof.name}, equation error. ");
+                    error = true;
+                }
+                i++;
             }
 
             return !error;

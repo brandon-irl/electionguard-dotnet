@@ -44,6 +44,7 @@ namespace ElectionGuard.Verifier.Core
             );
 
             // point 4:  c = c0 + c1 mod q is satisfied
+            // TODO: Verify that this works
             if (!CheckHashComp(challenge, proof.proof_zero_challenge, proof.proof_one_challenge))
                 error = true;
 
@@ -71,11 +72,27 @@ namespace ElectionGuard.Verifier.Core
 
         private bool CheckCpProofZeroProof(BigInteger pad, BigInteger data, BigInteger zeroPad, BigInteger zeroData, BigInteger zeroChallenge, BigInteger zeroRes)
         {
+            /*
+            check if Chaum-Pedersen proof zero proof(given challenge c0, response v0) is satisfied.
+
+            To proof the zero proof, two equations g ^ v0 = a0 * alpha ^ c0 mod p, K ^ v0 = b0 * beta ^ c0 mod p
+            have to be satisfied.
+            In the verification process, the challenge c of a selection is allowed to be broken into two components
+            in any way as long as c = (c0 + c1) mod p, c0 here is the first component broken from c.
+
+            :param pad: alpha of a selection
+            :param data: beta of a selection
+            :param zero_pad: zero_pad of a selection
+            :param zero_data: zero_data of a selection
+            :param zero_chal: zero_challenge of a selection
+            :param zero_res: zero_response of a selection
+            :return: True if both equations of the zero proof are satisfied, False if either is not satisfied
+            */
             var equ1L = BigInteger.ModPow(constants.generator, zeroRes, constants.large_prime);
-            var equ1R = BigInteger.Multiply(Numbers.ModP(zeroPad), BigInteger.ModPow(pad, zeroChallenge, Numbers.LargePrime));
+            var equ1R = Numbers.ModP(BigInteger.Multiply(zeroPad, BigInteger.ModPow(pad, zeroChallenge, constants.large_prime)));
 
             var equ2L = BigInteger.ModPow(context.elgamal_public_key, zeroRes, constants.large_prime);
-            var equ2R = BigInteger.Multiply(Numbers.ModP(zeroData), BigInteger.ModPow(data, zeroChallenge, Numbers.LargePrime));
+            var equ2R = Numbers.ModP(BigInteger.Multiply(zeroData, BigInteger.ModPow(data, zeroChallenge, Numbers.LargePrime)));
 
             var res = BigInteger.Equals(equ1L, equ1R) && BigInteger.Equals(equ2L, equ2R);
             if (!res)
@@ -86,6 +103,22 @@ namespace ElectionGuard.Verifier.Core
 
         private bool CheckCpProofOneProof(BigInteger pad, BigInteger data, BigInteger onePad, BigInteger oneData, BigInteger oneChallenge, BigInteger oneRes)
         {
+            /*
+            check if Chaum-Pedersen proof one proof(given challenge c1, response v1) is satisfied.
+
+            To proof the zero proof, two equations g ^ v1 = a1 * alpha ^ c1 mod p, g ^ c1 * K ^ v1 = b1 * beta ^ c1 mod p
+            have to be satisfied.
+            In the verification process, the challenge c of a selection is allowed to be broken into two components
+            in any way as long as c = (c0 + c1) mod p, c1 here is the second component broken from c.
+
+            :param pad: alpha of a selection
+            :param data: beta of a selection
+            :param one_pad: one_pad of a selection
+            :param one_data: one_data of a selection
+            :param one_chal: one_challenge of a selection
+            :param one_res: one_response of a selection
+            :return: True if both equations of the one proof are satisfied, False if either is not satisfied
+            */
             var equ1L = BigInteger.ModPow(constants.generator, oneRes, constants.large_prime);
             var equ1R = Numbers.ModP(BigInteger.Multiply(onePad, BigInteger.ModPow(pad, oneChallenge, constants.large_prime)));
 
@@ -101,7 +134,7 @@ namespace ElectionGuard.Verifier.Core
 
         private bool CheckHashComp(BigInteger challenge, BigInteger zeroChallenge, BigInteger oneChallenge)
         {
-            var expected = BigInteger.Add(Numbers.ModQ(zeroChallenge), oneChallenge);
+            var expected = Numbers.ModQ(BigInteger.Add(zeroChallenge, oneChallenge));
             var res = BigInteger.Equals(Numbers.ModQ(challenge), expected);
             if (!res)
                 Console.WriteLine("challenge value error.");
