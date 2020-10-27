@@ -9,5 +9,6 @@ namespace ElectionGuard.Verifier.Data
         public string DescriptionFileName { get; set; }
         public string CoefficientsFolderPath { get; set; }
         public string EncryptedBallotsFolderPath { get; set; }
+        public string TallyFileName { get; set; }
     }
 }

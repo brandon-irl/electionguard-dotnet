@@ -145,6 +145,51 @@ namespace ElectionGuard.Verifier.Core
             return !error;
         }
 
+        public async Task<bool> VerifyCastBallotTallies()
+        {
+            /*
+            check if the ballot tally satisfies the equations in box 6, including:
+            confirming for each (non-dummy) option in each contest in the ballot coding file that the aggregate encryption,
+            (𝐴, 𝐵) satisfies 𝐴 = ∏ 𝛼 and 𝐵 = ∏ 𝛽 where the (𝛼 , 𝛽) are the corresponding encryptions on all cast ballots
+            in the election record;
+            confirming for each (non-dummy) option in each contest in the ballot coding file the
+            following for each decrypting trustee 𝑇i, including:
+                            the given value vi is in set Zq,
+                            ai and bi are both in Zrp,
+                            challenge ci = H(Q-bar, (A,B), (ai, bi), Mi))
+                            equations g ^ vi = ai * Ki ^ ci mod p and A ^ vi = bi * Mi ^ ci mod p
+            :return: true if all the above requirements are satisfied, false if any hasn't been satisfied
+            */
+            bool totalError, shareError = false;
+            var tally = await dataService.GetTally();
+            var dv = new DecryptionVerifier(await dataService.GetDescription(), await dataService.GetEncryptedBallots().ToListAsync(), tally, await dataService.GetGuardianPublicKeys().ToListAsync(), constants);
+
+            // confirm that the aggregate encryption are the accumulative product of all
+            // corresponding encryption on all cast ballots
+            totalError = dv.MatchTotalAcrossBallots();
+
+            // confirm for each decrypting trustee Ti
+            shareError = await dv.MakeAllContestVerification(tally.contests.Values);
+
+            return totalError || shareError;
+        }
+
+        public async Task<bool> VerifyAllSpoiledBallots()
+        {
+            /*
+            verify all the spoiled ballots in the spoiled_ballots folder by checking each one individually
+            :return true if all the spoiled ballots are verified as valid, false otherwise
+            */
+
+            var error = false;
+            var tally = await dataService.GetTally();
+            var dv = new DecryptionVerifier(await dataService.GetDescription(), await dataService.GetEncryptedBallots().ToListAsync(), tally, await dataService.GetGuardianPublicKeys().ToListAsync(), constants);
+            foreach (var sb in tally.spoiled_ballots)
+                error = await dv.MakeAllContestVerification(sb.Value);
+
+            Console.WriteLine($"Spoiled ballot decryption {(error ? "failure" : "success")}");
+            return !error;
+        }
 
     }
 }

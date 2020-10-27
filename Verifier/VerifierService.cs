@@ -38,12 +38,15 @@ namespace ElectionGuard.Verifier.App
                         var keyGen = await verifier.VerifyAllGuardians();
                         Console.WriteLine($"Key Gen Result: {(keyGen ? "success" : "failure")} ");
 
-                        // Console.WriteLine("Starting [box 3, 4, 5] ballot encyption check...");
-                        // var ballots = await verifier.VerifyAllBallots();
-                        // Console.WriteLine($"Ballots Result: {(ballots ? "success" : "failure")} ");
+                        Console.WriteLine("Starting [box 3, 4, 5] ballot encyption check...");
+                        var ballots = await verifier.VerifyAllBallots();
+                        Console.WriteLine($"Ballots Result: {(ballots ? "success" : "failure")} ");
 
-                        //Console.WriteLine("Starting [box 6, 9] cast ballot check...");
-                        //Console.WriteLine("Starting [box 10] spoiled ballot check...");
+                        Console.WriteLine("Starting [box 6, 9] cast ballot check...");
+                        var tally = await verifier.VerifyCastBallotTallies();
+                        
+                        Console.WriteLine("Starting [box 10] spoiled ballot check...");
+                        await verifier.VerifyAllSpoiledBallots();
 
                     }
                     catch (Exception ex)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace ElectionGuard.Verifier.Core
@@ -289,6 +290,54 @@ namespace ElectionGuard.Verifier.Core
             public string logo_uri { get; set; }
             public Name2 name { get; set; }
             public string object_id { get; set; }
+        }
+    }
+
+    public class Tally
+    {
+        public Dictionary<string, Contest> contests { get; set; }
+        public string object_id { get; set; }
+        public Dictionary<string, Contest[]> spoiled_ballots { get; set; }
+
+        public class Contest
+        {
+            public string object_id { get; set; }
+            public Dictionary<string, Selection> selections { get; set; }
+
+            public class Selection
+            {
+                public Message message { get; set; }
+                public string object_id { get; set; }
+                public Share[] shares { get; set; }
+                public int tally { get; set; }
+                public BigInteger value { get; set; }
+
+                public class Message
+                {
+                    public BigInteger pad { get; set; }
+                    public BigInteger data { get; set; }
+                }
+
+                public class Share
+                {
+                    public BigInteger description_hash { get; set; }
+                    public string guardian_id { get; set; }
+                    public string object_id { get; set; }
+                    public Proof proof { get; set; }
+                    public BigInteger share { get; set; }
+
+                    public class Proof
+                    {
+                        public BigInteger challenge { get; set; }
+                        public BigInteger data { get; set; }
+                        public string name { get; set; }
+                        public BigInteger pad { get; set; }
+                        public BigInteger response { get; set; }
+                        public string usage { get; set; }
+                    }
+                }
+            }
+
         }
     }
 }

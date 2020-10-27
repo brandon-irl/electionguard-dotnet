@@ -25,6 +25,7 @@ namespace ElectionGuard.Verifier.Data
         Context context;
         Constants constants;
         Description description;
+        Tally tally;
 
         public JsonDataService(IOptions<DataOptions> dataOptions, ILogger<JsonDataService> logger, IConfiguration configuration)
         {
@@ -66,10 +67,23 @@ namespace ElectionGuard.Verifier.Data
                 yield return file;
         }
 
+        public async IAsyncEnumerable<BigInteger> GetGuardianPublicKeys()
+        {
+            await foreach (var file in GetFromFiles<Guardian>(Path.Combine(dataOptions.Value.BaseDir, dataOptions.Value.CoefficientsFolderPath)))
+                yield return file.coefficient_commitments.FirstOrDefault();
+        }
+
         public async IAsyncEnumerable<EncryptedBallot> GetEncryptedBallots()
         {
             await foreach (var file in GetFromFiles<EncryptedBallot>(Path.Combine(dataOptions.Value.BaseDir, dataOptions.Value.EncryptedBallotsFolderPath)))
                 yield return file;
+        }
+
+        public async Task<Tally> GetTally()
+        {
+            if (tally == null)
+                tally = await GetFromFile<Tally>(dataOptions.Value.TallyFileName);
+            return tally;
         }
 
         private async IAsyncEnumerable<T> GetFromFiles<T>(string path)
@@ -88,6 +102,7 @@ namespace ElectionGuard.Verifier.Data
                 result = await JsonSerializer.DeserializeAsync<T>(fs, options);
             return result;
         }
+
     }
 
     public sealed class JsonConverterBigInteger : JsonConverter<BigInteger>
