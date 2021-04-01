@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
-using ElectionGuard.Verifier.Data;
+using ElectionGuard.Data;
 
-namespace ElectionGuard.Verifier.App
+namespace ElectionGuard.App
 {
     class Program
     {

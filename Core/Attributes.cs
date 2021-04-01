@@ -1,6 +1,6 @@
 using System;
 
-namespace ElectionGuard.Verifier.Core
+namespace ElectionGuard.Core
 {
     public class ZRPParameterAttribute : Attribute { }
 

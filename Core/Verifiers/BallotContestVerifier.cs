@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using static ElectionGuard.Verifier.Core.EncryptedBallot;
+using static ElectionGuard.Core.EncryptedBallot;
 
-namespace ElectionGuard.Verifier.Core
+namespace ElectionGuard.Core
 {
     public class BallotContestVerifier
     {

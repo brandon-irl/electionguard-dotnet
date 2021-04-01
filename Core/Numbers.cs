@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ElectionGuard.Verifier.Core
+namespace ElectionGuard.Core
 {
     public class Numbers
     {

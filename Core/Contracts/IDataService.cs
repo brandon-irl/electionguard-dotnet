@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace ElectionGuard.Verifier.Core
+namespace ElectionGuard.Core
 {
     public interface IDataService
     {

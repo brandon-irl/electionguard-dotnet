@@ -1,4 +1,4 @@
-namespace ElectionGuard.Verifier.Data
+namespace ElectionGuard.Data
 {
     public class DataOptions
     {

@@ -1,10 +1,10 @@
 
-using ElectionGuard.Verifier.Core;
+using ElectionGuard.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace ElectionGuard.Verifier.Data
+namespace ElectionGuard.Data
 {
     public static class ConfigureData
     {

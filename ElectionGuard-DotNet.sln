@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionGuard.Verifier.Core", "Core\Core.csproj", "{77768D1D-09DE-4FBB-A42A-222F4A13FF42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionGuard-DotNet.Core", "Core\Core.csproj", "{77768D1D-09DE-4FBB-A42A-222F4A13FF42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionGuard.Verifier", "Verifier\Verifier.csproj", "{1AB7BC82-6BA8-4C57-9E7F-0E0A0E81346C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionGuard-DotNet.Verifier", "Verifier\Verifier.csproj", "{1AB7BC82-6BA8-4C57-9E7F-0E0A0E81346C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

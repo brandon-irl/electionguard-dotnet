@@ -8,12 +8,12 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using ElectionGuard.Verifier.Core;
+using ElectionGuard.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace ElectionGuard.Verifier.Data
+namespace ElectionGuard.Data
 {
     public class JsonDataService : IDataService
     {

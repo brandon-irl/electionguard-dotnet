@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace ElectionGuard.Verifier.Core
+namespace ElectionGuard.Core
 {
     public class FilePathGenerator
     {

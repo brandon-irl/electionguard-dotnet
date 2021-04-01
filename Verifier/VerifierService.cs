@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace ElectionGuard.Verifier.App
+namespace ElectionGuard.App
 {
     internal sealed class VerifierService : IHostedService
     {

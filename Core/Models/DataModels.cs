@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace ElectionGuard.Verifier.Core
+namespace ElectionGuard.Core
 {
     public class Context
     {

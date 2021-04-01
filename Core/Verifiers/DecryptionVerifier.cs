@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace ElectionGuard.Verifier.Core
+namespace ElectionGuard.Core
 
 {
     public class DecryptionVerifier
